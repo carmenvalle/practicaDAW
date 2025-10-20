@@ -1,0 +1,101 @@
+/* ==== ESTILOS ESPECÍFICOS PARA INDEX.HTML ==== */
+
+/* ==== FORMULARIOS MÁS PEQUEÑOS ==== */
+form {
+  max-width: 800px;
+  padding: 1rem;
+}
+
+fieldset {
+  padding: 0.8rem;
+}
+
+fieldset legend {
+  font-size: 1rem;
+}
+
+input {
+  padding: 0.4rem;
+  font-size: 0.9rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* ==== SECCIÓN DE ÚLTIMOS ANUNCIOS ==== */
+.anuncios {
+  margin: 3rem auto;
+  max-width: 1000px;
+}
+
+/* ==== LISTA DE ANUNCIOS ==== */
+.anuncios ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  padding: 0;
+}
+
+.anuncios ul li {
+  padding: 0;
+}
+
+.anuncios ul li::before {
+  content: none;
+}
+
+/* ==== ARTÍCULOS (TARJETAS DE ANUNCIOS) ==== */
+.anuncios article {
+  background-color: var(--color-blanco);
+  border: 2px solid var(--color-secundario);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.anuncios article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.anuncios article a {
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.anuncios article img {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.anuncios article h3 {
+  color: var(--color-principal);
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+  border: none;
+  padding: 0;
+}
+
+.anuncios article p {
+  color: #555;
+  font-size: 0.95rem;
+  margin: 0;
+  text-align: center;
+}
+
+/* ==== RESPONSIVE ==== */
+@media (max-width: 768px) {
+  /* Anuncios en 1 columna en móviles */
+  .anuncios ul {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
