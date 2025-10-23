@@ -2,21 +2,42 @@
 
 /* ==== FORMULARIOS MÁS PEQUEÑOS ==== */
 form {
-  max-width: 800px;
-  padding: 1rem;
+    max-width: 800px;
+    margin: 1rem auto;
+    padding: 1rem;
+    background-color: var(--color-blanco);
+    border-radius: var(--radio-borde);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 fieldset {
-  padding: 0.8rem;
+    padding: 1rem;
+    border: 1px solid var(--color-secundario);
+    border-radius: var(--radio-borde);
 }
 
 fieldset legend {
-  font-size: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 input {
-  padding: 0.4rem;
-  font-size: 0.9rem;
+    width: 100%;
+    padding: 0.6rem;
+    border: 2px solid var(--color-secundario);
+    border-radius: var(--radio-borde);
+    font-family: var(--fuente-base);
+    font-size: 0.95rem;
+    background-color: var(--color-fondo);
+    color: var(--color-principal);
+    margin-bottom: 1rem;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--color-principal);
+    background-color: var(--color-field);
 }
 
 button {

@@ -15,12 +15,7 @@ form p label {
 }
 
 /* ==== CAMPOS DE FORMULARIO ==== */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="tel"],
-input[type="number"],
-input[type="date"],
+input,
 select {
     width: 100%;
     padding: 0.6rem;
@@ -29,15 +24,18 @@ select {
     font-family: var(--fuente-base);
     font-size: 0.95rem;
     background-color: var(--color-fondo);
-    transition: border-color 0.3s ease, background-color 0.3s ease;
     color: var(--color-principal);
+    transition: border-color 0.3s ease, background-color 0.3s ease;
 }
-
 input:focus,
 select:focus {
     outline: none;
     border-color: var(--color-principal);
     background-color: var(--color-field);
+}
+
+#email {
+    margin-bottom: 1.2rem;
 }
 
 /* ==== CAMPO FECHA ==== */
@@ -50,7 +48,7 @@ input[type="date"]:focus {
 }
 
 /* ==== SEXO ==== */
-form p:nth-of-type(5) {
+p.sexo {
     background-color: var(--color-field);
     padding: 1rem;
     border-radius: var(--radio-borde);
@@ -60,7 +58,7 @@ form p:nth-of-type(5) {
     margin-bottom: 1.2rem;
 }
 
-form p:nth-of-type(5) label {
+p.sexo label {
     display: inline-block;
     margin-right: 1rem;
     font-weight: 500;
@@ -125,6 +123,12 @@ button {
 button:hover {
     background-color: var(--color-secundario);
     color: var(--color-principal);
+}
+
+/* JS */
+.campo-error {
+    border-color: #350a06;
+    background-color: #ffe6e6;
 }
 
 /* ==== RESPONSIVE ==== */

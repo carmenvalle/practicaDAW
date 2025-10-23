@@ -17,8 +17,6 @@
     <link rel="alternate stylesheet" href="css/accesibilidad.css" title="Letra grande">
     <link rel="alternate stylesheet" href="css/alto-contraste-accesibilidad.css" title="Alto contraste y accesibilidad">
 
-    <script type="text/javascript"></script>
-
     <title>Registro - PI Pisos & Inmuebles</title>
 </head>
 
@@ -53,22 +51,22 @@
     <main>
         <section>
             <h2>FORMULARIO DE REGISTRO</h2>
-            <form action="index_logueado.html" method="post" enctype="multipart/form-data">
+            <form id="formRegistro" action="index_logueado.html" method="post" enctype="multipart/form-data">
                 <p>
                     <label for="usuario"><strong>Nombre de usuario:</strong></label>
-                    <input type="text" id="usuario" name="usuario" required>
+                    <input id="usuario" name="usuario">
                 </p>
                 <p>
-                    <label for="contrasena"><strong>Contraseña:</strong></label>
-                    <input type="password" id="contrasena" name="contrasena" required>
+                    <label for="password"><strong>Contraseña:</strong></label>
+                    <input id="password" name="contrasena">
                 </p>
                 <p>
-                    <label for="repetir"><strong>Repetir contraseña:</strong></label>
-                    <input type="password" id="repetir" name="repetir" required>
+                    <label for="password2"><strong>Repetir contraseña:</strong></label>
+                    <input id="password2" name="repetir">
                 </p>
                 <p>
                     <label for="email"><strong>Correo electrónico:</strong></label>
-                    <input type="email" id="email" name="email" required>
+                    <input id="email" name="email">
                 </p>
                 <p class="sexo">
                     <strong>Sexo: </strong>
@@ -78,29 +76,29 @@
                 </p>
                 <p>
                     <label for="nacimiento"><strong>Fecha de nacimiento:</strong></label>
-                    <input type="date" id="nacimiento" name="nacimiento">
+                    <input id="nacimiento" name="nacimiento" placeholder="dd/mm/aaaa">
                 </p>
                 <p>
                     <label for="ciudad"><strong>Ciudad de residencia:</strong></label>
-                    <input type="text" id="ciudad" name="ciudad">
+                    <input id="ciudad" name="ciudad">
                 </p>
                 <p>
                     <label for="pais"><strong>País de residencia:</strong></label>
                     <select id="pais" name="pais">
                         <option value="">Seleccione un país</option>
-                        <option value="es">Alemania</option>
-                        <option value="pt">España</option>
+                        <option value="de">Alemania</option>
+                        <option value="es">España</option>
                         <option value="fr">Francia</option>
                         <option value="it">Italia</option>
-                        <option value="de">Portugal</option>
+                        <option value="pt">Portugal</option>
                     </select>
                 </p>
                 <p>
                     <label for="foto"><strong>Foto de perfil:</strong></label>
-                    <input type="file" id="foto" name="foto" accept="image/*">
+                    <input id="foto" name="foto" accept="image/*">
                 </p>
                 <p>
-                    <button type="submit"><strong>REGISTRARSE</strong></button>
+                    <button><strong>REGISTRARSE</strong></button>
                 </p>
             </form>
         </section>
@@ -120,6 +118,7 @@
         </p>
     </footer>
 
+    <script src="js/registro.js"></script>
 </body>
 
 </html>
