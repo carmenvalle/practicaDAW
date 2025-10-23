@@ -1,170 +1,149 @@
-function $(id) {
-    return document.getElementById(id);
+function $(id) { return document.getElementById(id); }
+
+// Mostrar error debajo de un campo o grupo
+function mostrarErrorCampo(campo, mensaje) {
+    if (!campo) return;
+
+    // si es un grupo de radios, mostrar en el contenedor padre <p>
+    if (campo.length && campo[0].name === "sexo") {
+        campo = campo[0].closest("p.sexo");
+    }
+
+    campo.classList.add('campo-error');
+
+    // eliminar error anterior
+    let eliminar = campo.nextElementSibling;
+    if (eliminar && eliminar.classList.contains('error-campo')) eliminar.remove();
+
+    const span = document.createElement('span');
+    span.className = 'error-campo';
+    span.textContent = mensaje;
+    campo.insertAdjacentElement('afterend', span);
 }
 
-
 function validarFormulario(event) {
+    event.preventDefault();
     let ok = true;
-    let msg = "Errores en el formulario:\n";
 
+    // limpiar errores previos
     const campos = document.querySelectorAll("input, select");
     campos.forEach(campo => {
         campo.classList.remove("campo-error");
+        let sibling = campo.nextElementSibling;
+        if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
     });
 
-    // Validar el nombre de usuarioq
-
-    let usuario = $("usuario").value.trim();
+    // Usuario
+    const usuario = $("usuario").value.trim();
     if (usuario.length < 3 || usuario.length > 15) {
-        msg += "- El nombre de usuario debe tener entre 3 y 15 caracteres.\n";
+        mostrarErrorCampo($("usuario"), "El nombre de usuario debe tener entre 3 y 15 caracteres.");
         ok = false;
-        $("usuario").classList.add("campo-error");
     }
-
-    // no debe comenzar con número
     if (/^[0-9]/.test(usuario)) {
-        msg += "- El usuario no puede comenzar con un número.\n";
+        mostrarErrorCampo($("usuario"), "El usuario no puede comenzar con un número.");
         ok = false;
-        $("usuario").classList.add("campo-error");
     }
 
-    // Validar la contraseña
-
-    let password = $("password").value;
-    let password2 = $("password2").value;
-
+    // Contraseña
+    const password = $("password").value;
+    const password2 = $("password2").value;
     if (password.length < 6 || password.length > 15) {
-        msg += "- La contraseña debe tener entre 6 y 15 caracteres.\n";
+        mostrarErrorCampo($("password"), "La contraseña debe tener entre 6 y 15 caracteres.");
         ok = false;
-        $("password").classList.add("campo-error");
     }
-
     if(!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
-        msg += "- La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número.\n";
+        mostrarErrorCampo($("password"), "La contraseña debe contener al menos una mayúscula, una minúscula y un número.");
         ok = false;
-        $("password").classList.add("campo-error");
     }
-
     if (password !== password2) {
-        msg += "- Las contraseñas no coinciden.\n";
+        mostrarErrorCampo($("password2"), "Las contraseñas no coinciden.");
         ok = false;
-        $("password2").classList.add("campo-error");
     }
 
-    let email = $("email").value.trim();
+    // Email
+    const email = $("email").value.trim();
     if(email === "" || email.indexOf("@") === -1) {
-        msg += "- El correo electrónico no es válido.\n";
-        ok = false;
-        $("email").classList.add("campo-error");
-    }
-
-    // Validar que se ha seleccionado un sexo
-
-    let sexos = document.getElementsByName("sexo");
-    let seleccionado = false;
-    for(let i = 0; i < sexos.length; i++) {
-        if(sexos[i].checked) {
-            seleccionado = true;
-            break;
-        }
-    }
-
-    if(!seleccionado) {
-        msg += "- Debe seleccionar un sexo.\n";
+        mostrarErrorCampo($("email"), "El correo electrónico no es válido.");
         ok = false;
     }
 
-    // Validar la fecha de nacimiento (mayor de edad)
+    // Sexo
+    const sexos = document.getElementsByName("sexo");
+    if (!Array.from(sexos).some(s => s.checked)) {
+        mostrarErrorCampo(sexos, "Debes seleccionar un sexo.");
+        ok = false;
+    }
 
-    let fechaIni = $("nacimiento").value;
-    
+    // Fecha de nacimiento
+    const fechaIni = $("nacimiento").value;
     if (fechaIni) {
         let fechaNacimiento = new Date(fechaIni);
         let fechaActual = new Date();
         let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
         let mes = fechaActual.getMonth() - fechaNacimiento.getMonth();
-
-        if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) {
-            edad--;
-        }
-
-        if(edad < 18) {
-            msg += "- Debes ser mayor de edad para registrarte.\n";
+        if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) edad--;
+        if (edad < 18) {
+            mostrarErrorCampo($("nacimiento"), "Debes ser mayor de edad para registrarte.");
             ok = false;
-            $("nacimiento").classList.add("campo-error");
         }
     } else {
-        msg += "- Debes ingresar una fecha de nacimiento válida.\n";
+        mostrarErrorCampo($("nacimiento"), "Debes ingresar una fecha de nacimiento válida.");
         ok = false;
-        $("nacimiento").classList.add("campo-error");
     }
 
-    // Validar ciudad y país
-
-    let ciudad = $("ciudad").value.trim();
-    let pais = $("pais").value.trim();
-
+    // Ciudad y país
+    const ciudad = $("ciudad").value.trim();
+    const pais = $("pais").value.trim();
     if(ciudad !== "" && pais === "") {
-        msg += "- Si ingresas una ciudad, debes ingresar también un país.\n";
+        mostrarErrorCampo($("pais"), "Si ingresas una ciudad, debes ingresar también un país.");
         ok = false;
-        $("pais").classList.add("campo-error");
     }
 
-    // Validar foto de perfil
-
+    // Foto de perfil
     const perfil = $("foto");
-    let hay = false;
-    if (perfil) {
-        // si es input type=file, files será útil
-        if (perfil.files && perfil.files.length > 0) hay = true;
-        else if (perfil.value && perfil.value.trim() !== "") hay = true; // fallback
-    }
-
-    if (!hay) {
-        msg += "- Debes subir una foto de perfil.\n";
+    const hayFoto = perfil && ((perfil.files && perfil.files.length > 0) || (perfil.value && perfil.value.trim() !== ""));
+    if (!hayFoto) {
+        mostrarErrorCampo(perfil, "Debes subir una foto de perfil.");
         ok = false;
-        if (perfil) fotoEl.classList.add("campo-error");
     }
 
-    //Mostrar los errores si los hay
-
-    if(!ok) {
-        alert(msg);
-        event.preventDefault();
-    } else {
-        alert("Registro completado con éxito.");
+    if(ok) {
+        $("formRegistro").submit();
     }
-
-
 }
 
 function load() {
-    $("formRegistro").addEventListener("submit", validarFormulario);
+    const formRegistro = $("formRegistro");
+    if (formRegistro) formRegistro.addEventListener("submit", validarFormulario);
 
+    // eliminar error al escribir
     const campos = document.querySelectorAll("input, select");
     campos.forEach(campo => {
         campo.addEventListener("input", () => {
             campo.classList.remove("campo-error");
+            let sibling = campo.nextElementSibling;
+            if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
         });
     });
 
-    // focus para nacimiento: limpiar error cuando el usuario enfoque
-    const nacimientoEl = $("nacimiento");
-    if (nacimientoEl) {
-        nacimientoEl.addEventListener('focus', () => nacimientoEl.classList.remove('campo-error'));
+    // limpiar error al enfocar nacimiento
+    const nacimiento = $("nacimiento");
+    if (nacimiento) {
+        nacimiento.addEventListener('focus', () => nacimiento.classList.remove('campo-error'));
     }
 
-    // configurar input foto como file dinámicamente (si no quieres modificar HTML)
+    // manejar input de foto y preview
     const perfil = $("foto");
     if (perfil) {
         try {
             perfil.setAttribute('type', 'file');
-        } catch (e) {
-            console.warn('No se pudo establecer type=file dinámicamente:', e);
-        }
+        } catch(e) { console.warn('No se pudo establecer type=file dinámicamente:', e); }
 
         perfil.addEventListener('change', () => {
             perfil.classList.remove('campo-error');
+            let sibling = perfil.nextElementSibling;
+            if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+
             // preview
             const previewId = 'fotoPreview';
             let prev = document.getElementById(previewId);
@@ -181,10 +160,9 @@ function load() {
                 const reader = new FileReader();
                 reader.onload = e => { prev.src = e.target.result; };
                 reader.readAsDataURL(file);
-            } else if (prev) {
-                prev.remove();
-            }
+            } else if (prev) prev.remove();
         });
     }
 }
+
 document.addEventListener("DOMContentLoaded", load);

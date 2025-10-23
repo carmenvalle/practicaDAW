@@ -112,6 +112,18 @@ button {
   text-align: center;
 }
 
+.campo-error {
+    border-color: #350a06;
+    background-color: #ffe6e6;
+}
+
+.error-campo {
+    display: block;
+    color: #350a06;
+    font-size: 0.875rem;
+    margin-top: 0.2rem;
+}
+
 /* ==== RESPONSIVE ==== */
 @media (max-width: 768px) {
   /* Anuncios en 1 columna en móviles */

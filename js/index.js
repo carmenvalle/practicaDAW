@@ -1,90 +1,91 @@
-// Validación y manejo para index.html (login y búsqueda rápida)
-
 function $(id) { return document.getElementById(id); }
 
+/** Muestra mensaje de error debajo del campo */
+function mostrarErrorCampo(campo, mensaje) {
+    campo.classList.add('campo-error');
+    // eliminar error anterior si existe
+    let sibling = campo.nextElementSibling;
+    if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+    const span = document.createElement('span');
+    span.className = 'error-campo';
+    span.textContent = mensaje;
+    campo.parentNode.appendChild(span);
+}
+
+/** Validación Login */
 function validarLogin(e) {
-  e.preventDefault();
-  const form = e.target;
-  const user = form.querySelector('#usuario');
-  const pass = form.querySelector('#password');
-  let ok = true;
-  // limpiar
-  [user, pass].forEach(el => { if (el) { el.classList.remove('campo-error'); } });
-
-  let mensajes = [];
-  if (!user || !user.value.trim()) {
-    mensajes.push('Introduce tu nombre de usuario.');
-    if (user) {
-      user.classList.add('campo-error');
-    }
-    ok = false;
-  }
-  if (!pass || !pass.value) {
-    mensajes.push('Introduce tu contraseña.');
-    if (pass) {
-      pass.classList.add('campo-error');
-    }
-    ok = false;
-  }
-
-  if (!ok) {
-    mostrarMensajesLogin(mensajes);
-    return;
-  }
-
-  // Si quieres enviar por AJAX puedes hacerlo aquí; por ahora dejamos el submit normal
-  form.submit();
-}
-
-function mostrarMensajesLogin(msgs) {
-  let cont = document.querySelector('#textoLoginIndex');
-  if (!cont) {
-    cont = document.createElement('div');
-    cont.id = 'textoLoginIndex';
-    const form = document.querySelector('main section form');
-    if (form) {
-      form.insertBefore(cont, form.firstChild);
-    }
-  }
-  cont.innerHTML = '<ul>' + msgs.map(m => '<li>' + m + '</li>').join('') + '</ul>';
-}
-
-function validarBusqueda(e) {
-  // formulario de búsqueda (action resultados.html)
-  // prevenir si vacio o < 3 caracteres
-  const input = document.querySelector('#consulta');
-  if (!input) {
-    return; // nada que hacer
-  }
-  if (!input.value.trim() || input.value.trim().length < 3) {
     e.preventDefault();
-    let cont = document.querySelector('#textoBusqueda');
-    if (!cont) {
-      cont = document.createElement('div');
-      cont.id = 'textoBusqueda';
-      input.parentNode.insertBefore(cont, input.nextSibling);
+    const form = e.target;
+    const user = form.querySelector('#usuario');
+    const pass = form.querySelector('#password');
+
+    // limpiar errores anteriores
+    [user, pass].forEach(el => {
+        if (el) {
+            el.classList.remove('campo-error');
+            let sibling = el.nextElementSibling;
+            if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+        }
+    });
+
+    let ok = true;
+
+    if (!user || !user.value.trim()) {
+        mostrarErrorCampo(user, 'Introduce tu nombre de usuario.');
+        ok = false;
     }
-    cont.innerHTML = '<p class="campo-error">Escribe al menos 3 caracteres para buscar.</p>';
-    input.classList.add('campo-error');
-    input.focus();
-  }
+
+    if (!pass || !pass.value) {
+        mostrarErrorCampo(pass, 'Introduce tu contraseña.');
+        ok = false;
+    }
+
+    if (ok) form.submit();
 }
 
+/** Validación Búsqueda */
+function validarBusqueda(e) {
+    const input = document.querySelector('#consulta');
+    if (!input) return;
+
+    // limpiar error anterior
+    input.classList.remove('campo-error');
+    let sibling = input.nextElementSibling;
+    if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+
+    if (!input.value.trim() || input.value.trim().length < 3) {
+        e.preventDefault();
+
+        const span = document.createElement('span');
+        span.className = 'error-campo';
+        span.textContent = 'Escribe al menos 3 caracteres para buscar.';
+
+        // insertar justo después del input
+        input.insertAdjacentElement('afterend', span);
+
+        input.classList.add('campo-error');
+        input.focus();
+    }
+}
+
+/** Inicialización de formulario en index.html */
 function initIndex() {
-  // enlazar login
-  const formLogin = document.querySelector('main section form[action="index_logueado.html"]');
-  if (formLogin) {
-    formLogin.addEventListener('submit', validarLogin);
-  }
+    const formLogin = document.querySelector('main section form[action="index_logueado.html"]');
+    if (formLogin) {
+        formLogin.addEventListener('submit', validarLogin);
+    }
 
-  // enlazar busqueda
-  const formSearch = document.querySelector('main section form[action="resultados.html"]');
-  if (formSearch) {
-    formSearch.addEventListener('submit', validarBusqueda);
-  }
+    const formSearch = document.querySelector('main section form[action="resultados.html"]');
+    if (formSearch) {
+        formSearch.addEventListener('submit', validarBusqueda);
+    }
 
-  // limpieza de errores al escribir
-  document.querySelectorAll('input').forEach(i => i.addEventListener('input', () => i.classList.remove('campo-error')));
+    // limpiar errores al escribir
+    document.querySelectorAll('input').forEach(i => i.addEventListener('input', () => {
+        i.classList.remove('campo-error');
+        let sibling = i.nextElementSibling;
+        if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+    }));
 }
 
 document.addEventListener('DOMContentLoaded', initIndex);
