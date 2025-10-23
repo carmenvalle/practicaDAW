@@ -4,8 +4,10 @@ function $(id) { return document.getElementById(id); }
 function mostrarErrorCampo(campo, mensaje) {
     campo.classList.add('campo-error');
     // eliminar error anterior si existe
-    let sibling = campo.nextElementSibling;
-    if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+    let eliminar = campo.nextElementSibling;
+    if (eliminar && eliminar.classList.contains('error-campo')) {
+        eliminar.remove();
+    }
     const span = document.createElement('span');
     span.className = 'error-campo';
     span.textContent = mensaje;
@@ -23,8 +25,10 @@ function validarLogin(e) {
     [user, pass].forEach(el => {
         if (el) {
             el.classList.remove('campo-error');
-            let sibling = el.nextElementSibling;
-            if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+            let eliminar = el.nextElementSibling;
+            if (eliminar && eliminar.classList.contains('error-campo')) {
+                eliminar.remove();
+            }
         }
     });
 
@@ -40,18 +44,24 @@ function validarLogin(e) {
         ok = false;
     }
 
-    if (ok) form.submit();
+    if (ok) {
+        form.submit();
+    }
 }
 
 /** Validación Búsqueda */
 function validarBusqueda(e) {
     const input = document.querySelector('#consulta');
-    if (!input) return;
+    if (!input) {
+        return;
+    }
 
     // limpiar error anterior
     input.classList.remove('campo-error');
-    let sibling = input.nextElementSibling;
-    if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+    let eliminar = input.nextElementSibling;
+    if (eliminar && eliminar.classList.contains('error-campo')) {
+        eliminar.remove();
+    }
 
     if (!input.value.trim() || input.value.trim().length < 3) {
         e.preventDefault();
@@ -83,8 +93,10 @@ function initIndex() {
     // limpiar errores al escribir
     document.querySelectorAll('input').forEach(i => i.addEventListener('input', () => {
         i.classList.remove('campo-error');
-        let sibling = i.nextElementSibling;
-        if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+        let eliminar = i.nextElementSibling;
+        if (eliminar && eliminar.classList.contains('error-campo')) {
+            eliminar.remove();
+        }
     }));
 }
 

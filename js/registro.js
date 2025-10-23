@@ -13,7 +13,9 @@ function mostrarErrorCampo(campo, mensaje) {
 
     // eliminar error anterior
     let eliminar = campo.nextElementSibling;
-    if (eliminar && eliminar.classList.contains('error-campo')) eliminar.remove();
+    if (eliminar && eliminar.classList.contains('error-campo')) {
+        eliminar.remove();
+    }
 
     const span = document.createElement('span');
     span.className = 'error-campo';
@@ -29,8 +31,10 @@ function validarFormulario(event) {
     const campos = document.querySelectorAll("input, select");
     campos.forEach(campo => {
         campo.classList.remove("campo-error");
-        let sibling = campo.nextElementSibling;
-        if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+        let eliminar = campo.nextElementSibling;
+        if (eliminar && eliminar.classList.contains('error-campo')) {
+            eliminar.remove();
+        }
     });
 
     // Usuario
@@ -81,7 +85,9 @@ function validarFormulario(event) {
         let fechaActual = new Date();
         let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
         let mes = fechaActual.getMonth() - fechaNacimiento.getMonth();
-        if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) edad--;
+        if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) {
+            edad--;
+        }
         if (edad < 18) {
             mostrarErrorCampo($("nacimiento"), "Debes ser mayor de edad para registrarte.");
             ok = false;
@@ -114,15 +120,19 @@ function validarFormulario(event) {
 
 function load() {
     const formRegistro = $("formRegistro");
-    if (formRegistro) formRegistro.addEventListener("submit", validarFormulario);
+    if (formRegistro) {
+        formRegistro.addEventListener("submit", validarFormulario);
+    }
 
     // eliminar error al escribir
     const campos = document.querySelectorAll("input, select");
     campos.forEach(campo => {
         campo.addEventListener("input", () => {
             campo.classList.remove("campo-error");
-            let sibling = campo.nextElementSibling;
-            if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+            let eliminar = campo.nextElementSibling;
+            if (eliminar && eliminar.classList.contains('error-campo')) {
+                eliminar.remove();
+            }
         });
     });
 
@@ -137,12 +147,16 @@ function load() {
     if (perfil) {
         try {
             perfil.setAttribute('type', 'file');
-        } catch(e) { console.warn('No se pudo establecer type=file dinámicamente:', e); }
+        } catch(e) {
+            console.warn('No se pudo establecer type=file dinámicamente:', e);
+        }
 
         perfil.addEventListener('change', () => {
             perfil.classList.remove('campo-error');
-            let sibling = perfil.nextElementSibling;
-            if (sibling && sibling.classList.contains('error-campo')) sibling.remove();
+            let eliminar = perfil.nextElementSibling;
+            if (eliminar && eliminar.classList.contains('error-campo')) {
+                eliminar.remove();
+            }
 
             // preview
             const previewId = 'fotoPreview';
@@ -160,7 +174,9 @@ function load() {
                 const reader = new FileReader();
                 reader.onload = e => { prev.src = e.target.result; };
                 reader.readAsDataURL(file);
-            } else if (prev) prev.remove();
+            } else if (prev) {
+                prev.remove();
+            }
         });
     }
 }
