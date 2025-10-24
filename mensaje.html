@@ -55,18 +55,13 @@
     <main>
         <section>
             <h3>Enviar Mensaje</h3>
-            <form action="mensaje_enviado.html">
+            <form id="formMensaje" action="mensaje_enviado.html">
                 <textarea name="mensaje" id="mensaje" placeholder="Mensaje al anunciante"></textarea>
                 <p class="tipo-mensaje">
                     Tipo de mensaje:
-                    <label><input type="radio" name="tipo_mensaje" value="Más inofrmación"> Más información</label>
-                    <label><input type="radio" name="tipo_mensaje" value="Solicitar una cita"> Solicitar una
-                        cita</label>
-                    <label><input type="radio" name="tipo_mensaje" value="Comunicar una oferta"> Comunicar una
-                        oferta</label>
                 </p>
                 <p>
-                    <button type="submit"><strong>ENVIAR MENSAJE</strong></button>
+                    <button><strong>ENVIAR MENSAJE</strong></button>
                 </p>
             </form>
         </section>
@@ -86,6 +81,7 @@
         </p>
     </footer>
 
+        <script src="js/mensaje.js"></script>
 </body>
 
 </html>
