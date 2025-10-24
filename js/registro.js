@@ -142,7 +142,7 @@ function load() {
         nacimiento.addEventListener('focus', () => nacimiento.classList.remove('campo-error'));
     }
 
-    // manejar input de foto y preview
+    //Foto de perfil
     const perfil = $("foto");
     if (perfil) {
         try {
@@ -158,7 +158,7 @@ function load() {
                 eliminar.remove();
             }
 
-            // preview
+            //
             const previewId = 'fotoPreview';
             let prev = document.getElementById(previewId);
             if (!prev) {
@@ -176,6 +176,72 @@ function load() {
                 reader.readAsDataURL(file);
             } else if (prev) {
                 prev.remove();
+            }
+        });
+    }
+
+    //Opcion radio
+    const contenedorSexo = document.querySelector("p.sexo");
+    if (contenedorSexo) {
+        const opcionesSexo = [
+            { valor: "H", texto: "Hombre" },
+            { valor: "M", texto: "Mujer" },
+            { valor: "O", texto: "Otro" }
+        ];
+
+        opcionesSexo.forEach(op => {
+            const input = document.createElement("input");
+            input.name = "sexo";
+            input.value = op.valor;
+            input.setAttribute("type", "radio"); // asignado dinámicamente
+
+            const label = document.createElement("label");
+            label.textContent = " " + op.texto;
+            label.prepend(input);
+
+            contenedorSexo.appendChild(label);
+            contenedorSexo.appendChild(document.createTextNode(" "));
+        });
+    }
+
+    //Opcion option pais
+    const selectPais = $("pais");
+    if (selectPais) {
+        const opcionesPais = [
+            { valor: "", texto: "Seleccione un país" },
+            { valor: "de", texto: "Alemania" },
+            { valor: "es", texto: "España" },
+            { valor: "fr", texto: "Francia" },
+            { valor: "it", texto: "Italia" },
+            { valor: "pt", texto: "Portugal" }
+        ];
+
+        opcionesPais.forEach(op => {
+            const option = document.createElement("option");
+            option.value = op.valor;
+            option.textContent = op.texto;
+            selectPais.appendChild(option);
+        });
+    }
+
+    //Opcion calendario
+    const nacimientoInput = $("nacimiento");
+    if (nacimientoInput) {
+        try {
+            nacimientoInput.setAttribute("type", "date"); // activa el calendario nativo
+        } catch (e) {
+            console.warn("No se pudo establecer type=date dinámicamente:", e);
+        }
+
+        // Estilo visual y formato de placeholder
+        nacimientoInput.placeholder = "Selecciona tu fecha de nacimiento";
+
+        // Limpiar error visual al seleccionar fecha
+        nacimientoInput.addEventListener("change", () => {
+            nacimientoInput.classList.remove("campo-error");
+            let eliminar = nacimientoInput.nextElementSibling;
+            if (eliminar && eliminar.classList.contains("error-campo")) {
+                eliminar.remove();
             }
         });
     }

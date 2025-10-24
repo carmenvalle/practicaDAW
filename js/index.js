@@ -1,17 +1,28 @@
 function $(id) { return document.getElementById(id); }
 
-/** Muestra mensaje de error debajo del campo */
+/** Muestra mensaje de error debajo del campo (versión unificada) */
 function mostrarErrorCampo(campo, mensaje) {
+    if (!campo) {
+        return;
+    }
+
+    // si es un grupo de radios, mostrar en el contenedor padre <p>
+    if (campo.length && campo[0].name === "sexo") {
+        campo = campo[0].closest("p.sexo");
+    }
+
     campo.classList.add('campo-error');
-    // eliminar error anterior si existe
+
+    // eliminar error anterior
     let eliminar = campo.nextElementSibling;
     if (eliminar && eliminar.classList.contains('error-campo')) {
         eliminar.remove();
     }
+
     const span = document.createElement('span');
     span.className = 'error-campo';
     span.textContent = mensaje;
-    campo.parentNode.appendChild(span);
+    campo.insertAdjacentElement('afterend', span);
 }
 
 /** Validación Login */
@@ -65,15 +76,7 @@ function validarBusqueda(e) {
 
     if (!input.value.trim() || input.value.trim().length < 3) {
         e.preventDefault();
-
-        const span = document.createElement('span');
-        span.className = 'error-campo';
-        span.textContent = 'Escribe al menos 3 caracteres para buscar.';
-
-        // insertar justo después del input
-        input.insertAdjacentElement('afterend', span);
-
-        input.classList.add('campo-error');
+        mostrarErrorCampo(input, 'Escribe al menos 3 caracteres para buscar.');
         input.focus();
     }
 }

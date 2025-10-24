@@ -54,21 +54,14 @@
     <main>
         <section>
             <h2>FORMULARIO DE BÚSQUEDA</h2>
-            <form action="resultados.html" method="get">
-                <p>
+            <form id="formBuscar" action="resultados.html" method="get">
+                <p class="anuncio">
                     <strong>Tipo de anuncio:</strong>
-                    <label><input type="radio" name="tipo_anuncio" value="venta"> Venta</label>
-                    <label><input type="radio" name="tipo_anuncio" value="alquiler"> Alquiler</label>
                 </p>
                 <p>
                     <label for="vivienda">Tipo de vivienda:</label>
                     <select id="vivienda" name="vivienda">
-                        <option value="">Seleccione</option>
-                        <option value="obra-nueva">Obra nueva</option>
-                        <option value="vivienda">Vivienda</option>
-                        <option value="oficina">Oficina</option>
-                        <option value="local">Local</option>
-                        <option value="garaje">Garaje</option>
+
                     </select>
                 </p>
                 <p>
@@ -78,26 +71,19 @@
                 <p>
                     <label for="pais">País:</label>
                     <select id="pais" name="pais">
-                        <option value="">Seleccione un país</option>
-                        <option value="es">Alemania</option>
-                        <option value="pt">España</option>
-                        <option value="fr">Francia</option>
-                        <option value="it">Italia</option>
-                        <option value="de">Portugal</option>
                     </select>
                 </p>
                 <p>
                     <label for="precio-min">Precio entre:</label>
-                    <input type="number" id="precio-min" name="precio_min" min="0"> y
-                    <input type="number" id="precio-max" name="precio_max" min="0">
+                    <input id="precio-min" name="precio_min"> y <input id="precio-max" name="precio_max">
                 </p>
                 <p>
                     <label for="fecha-desde">Fecha de publicación entre:</label>
-                    <input type="date" id="fecha-desde" name="fecha_desde"> y
-                    <input type="date" id="fecha-hasta" name="fecha_hasta">
+                    <input id="fecha-desde" name="fecha_desde"> y
+                    <input id="fecha-hasta" name="fecha_hasta">
                 </p>
                 <p>
-                    <button type="submit" class="btn"><strong>BUSCAR</strong></button>
+                    <button class="btn"><strong>BUSCAR</strong></button>
                 </p>
             </form>
         </section>
@@ -116,6 +102,8 @@
         </a>   
         </p>
     </footer>
+
+    <script src="js/buscar.js"></script>
 
 </body>
 
