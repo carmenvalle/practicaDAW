@@ -10,14 +10,12 @@
     <link rel="stylesheet" href="fontello/css/fontello.css">
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/folleto.css">
-    
+
     <link rel="alternate stylesheet" href="css/modo_oscuro.css" title="Modo oscuro">
 
     <link rel="alternate stylesheet" href="css/alto-contraste.css" title="Alto contraste">
     <link rel="alternate stylesheet" href="css/accesibilidad.css" title="Letra grande">
     <link rel="alternate stylesheet" href="css/alto-contraste-accesibilidad.css" title="Alto contraste y accesibilidad">
-
-    <script type="text/javascript"></script>
 
     <title>Solicitar folleto - PI Pisos & Inmuebles</title>
 </head>
@@ -62,7 +60,7 @@
 
         <aside>
             <h2>Tarifas</h2>
-            <table>
+            <table class="tarifas">
                 <thead>
                     <tr>
                         <th>Concepto</th>
@@ -106,27 +104,26 @@
             </table>
         </aside>
 
-
         <section>
             <h2>Formulario de solicitud</h2>
             <p>
                 Los campos marcados con un asterisco (*) son obligatorios.
             </p>
-            <form action="solicitar_folleto_respuesta.html" method="post">
+            <form id="formFolleto" action="solicitar_folleto_respuesta.html" method="post" novalidate>
 
                 <p>
                     <label for="nombre">Nombre y apellidos (*):</label>
-                    <input type="text" id="nombre" name="nombre" maxlength="200" required>
+                    <input type="text" id="nombre" name="nombre">
                 </p>
 
                 <p>
                     <label for="correo">Correo electrónico (*):</label>
-                    <input type="email" id="correo" name="correo" maxlength="200" required>
+                    <input type="text" id="correo" name="correo">
                 </p>
 
                 <p>
                     <label for="telefono">Teléfono:</label>
-                    <input type="tel" id="telefono" name="telefono">
+                    <input type="text" id="telefono" name="telefono">
                 </p>
 
                 <fieldset>
@@ -134,12 +131,12 @@
 
                     <p>
                         <label for="calle">Calle:</label>
-                        <input type="text" id="calle" name="calle" required>
+                        <input type="text" id="calle" name="calle">
                     </p>
 
                     <p>
                         <label for="numero">Número:</label>
-                        <input type="text" id="numero" name="numero" required>
+                        <input type="text" id="numero" name="numero">
                     </p>
 
                     <p>
@@ -149,28 +146,28 @@
 
                     <p>
                         <label for="codigo_postal">Código postal:</label>
-                        <input type="text" id="codigo_postal" name="codigo_postal" required>
+                        <input type="text" id="codigo_postal" name="codigo_postal">
                     </p>
 
                     <p>
                         <label for="localidad">Localidad:</label>
-                        <input type="text" id="localidad" name="localidad" required>
+                        <input type="text" id="localidad" name="localidad">
                     </p>
 
                     <p>
                         <label for="provincia">Provincia:</label>
-                        <input type="text" id="provincia" name="provincia" required>
+                        <input type="text" id="provincia" name="provincia">
                     </p>
 
                     <p>
                         <label for="pais">País:</label>
-                        <input type="text" id="pais" name="pais" required>
+                        <input type="text" id="pais" name="pais">
                     </p>
                 </fieldset>
 
                 <p>
                     <label for="texto">Texto adicional:</label><br>
-                    <textarea id="texto" name="texto" maxlength="4000"
+                    <textarea id="texto" name="texto"
                         placeholder="Información adicional a la que ya tiene el propio anuncio"></textarea>
                 </p>
 
@@ -181,18 +178,17 @@
 
                 <p>
                     <label for="copias">Número de copias (*):</label>
-                    <input type="number" id="copias" name="copias" min="1" max="99" value="1" required>
+                    <input type="text" id="copias" name="copias" value="1">
                 </p>
 
                 <p>
                     <label for="resolucion">Resolución (DPI) (*):</label>
-                    <input type="number" id="resolucion" name="resolucion" min="150" max="900" step="150" value="150"
-                        required>
+                    <input type="text" id="resolucion" name="resolucion" value="150">
                 </p>
 
                 <p>
                     <label for="anuncio">Selecciona el anuncio (*):</label>
-                    <select id="anuncio" name="anuncio" required>
+                    <select id="anuncio" name="anuncio">
                         <option value="">-- Selecciona tu anuncio --</option>
                         <option value="anuncio1">Anuncio 1</option>
                         <option value="anuncio2">Anuncio 2</option>
@@ -201,18 +197,18 @@
 
                 <p>
                     <label for="fecha">Fecha aproximada de recepción:</label>
-                    <input type="date" id="fecha" name="fecha">
+                    <input type="text" id="fecha" name="fecha">
                 </p>
 
                 <p>
                     Impresión a color (*):
-                    <label><input type="radio" name="impresion_color" value="color" required> A color</label>
+                    <label><input type="radio" name="impresion_color" value="color"> A color</label>
                     <label><input type="radio" name="impresion_color" value="bn"> Blanco y negro</label>
                 </p>
 
                 <p>
                     Mostrar precio (*):
-                    <label><input type="radio" name="mostrar_precio" value="si" required> Sí</label>
+                    <label><input type="radio" name="mostrar_precio" value="si"> Sí</label>
                     <label><input type="radio" name="mostrar_precio" value="no"> No</label>
                 </p>
 
@@ -222,21 +218,33 @@
             </form>
         </section>
 
-        <section>
-            <a href="#inicio" class="btn"><strong>SALTAR AL PRINCIPIO</strong></a>
-        </section>
+        <div id="boton-tabla-section">
+            <p class="toggle-cost-btn">
+                <button id="toggle-cost-table" class="btn" type="button" aria-expanded="false">Mostrar tabla de costes
+                    del folleto</button>
+            </p>
+        </div>
 
+        <section id="tabla-costes-section">
+            <div id="cost-table-container"></div>
+        </section>
     </main>
+
+    <div class="salta-inicio">
+        <a href="#inicio" class="btn">SALTAR AL PRINCIPIO</a>
+    </div>
 
     <footer>
         <p><i class="icon-copyright"></i>2025 PI - Pisos &amp; Inmuebles.</p>
         <p>
-        Autores: Silvia Balmaseda y Carmen Valle
-        <a href="accesibilidad.html" title="Declaración de accesibilidad" style="color: inherit; text-decoration: underline;">
-            <i class="icon-info" style="font-size: 1rem;"></i>
-        </a>   
+            Autores: Silvia Balmaseda y Carmen Valle
+            <a href="accesibilidad.html" title="Declaración de accesibilidad"
+                style="color: inherit; text-decoration: underline;">
+                <i class="icon-info" style="font-size: 1rem;"></i>
+            </a>
         </p>
     </footer>
+    <script src="js/solicitar_folleto.js"></script>
 </body>
 
 </html>

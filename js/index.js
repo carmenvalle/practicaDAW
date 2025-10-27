@@ -50,9 +50,25 @@ function validarLogin(e) {
         ok = false;
     }
 
+    // Validación de contraseña igual que en registro
     if (!pass || !pass.value) {
         mostrarErrorCampo(pass, 'Introduce tu contraseña.');
         ok = false;
+    } else {
+        const pwd = pass.value;
+        if (pwd.length < 6 || pwd.length > 15) {
+            mostrarErrorCampo(pass, 'La contraseña debe tener entre 6 y 15 caracteres.');
+            ok = false;
+        }
+        const faltas = [];
+        if (!/[A-Z]/.test(pwd)) { faltas.push('una mayúscula'); }
+        if (!/[a-z]/.test(pwd)) { faltas.push('una minúscula'); }
+        if (!/[0-9]/.test(pwd)) { faltas.push('un número'); }
+        if (faltas.length > 0) {
+            const msg = `La contraseña debe incluir al menos ${faltas.join(', ')}.`;
+            mostrarErrorCampo(pass, msg);
+            ok = false;
+        }
     }
 
     if (ok) {
@@ -101,6 +117,14 @@ function initIndex() {
             eliminar.remove();
         }
     }));
+
+    // Asignar tipo password por JS para el campo de login
+    const pass = document.querySelector('#password');
+    if (pass) {
+        try { 
+            pass.setAttribute('type', 'password'); 
+        } catch (e) {}
+    }
 }
 
 document.addEventListener('DOMContentLoaded', initIndex);

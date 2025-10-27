@@ -48,15 +48,20 @@ function validarFormulario(event) {
         ok = false;
     }
 
-    // Contraseña
+    // Contraseña (mensajes específicos)
     const password = $("password").value;
     const password2 = $("password2").value;
     if (password.length < 6 || password.length > 15) {
         mostrarErrorCampo($("password"), "La contraseña debe tener entre 6 y 15 caracteres.");
         ok = false;
     }
-    if(!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
-        mostrarErrorCampo($("password"), "La contraseña debe contener al menos una mayúscula, una minúscula y un número.");
+    const faltas = [];
+    if (!/[A-Z]/.test(password)) { faltas.push("una mayúscula"); }
+    if (!/[a-z]/.test(password)) { faltas.push("una minúscula"); }
+    if (!/[0-9]/.test(password)) { faltas.push("un número"); }
+    if (faltas.length > 0) {
+        const msg = `La contraseña debe incluir al menos ${faltas.join(", ")}.`;
+        mostrarErrorCampo($("password"), msg);
         ok = false;
     }
     if (password !== password2) {
@@ -65,9 +70,67 @@ function validarFormulario(event) {
     }
 
     // Email
-    const email = $("email").value.trim();
-    if(email === "" || email.indexOf("@") === -1) {
-        mostrarErrorCampo($("email"), "El correo electrónico no es válido.");
+    const emailCampo = $("email");
+    const email = emailCampo ? emailCampo.value.trim() : "";
+    let emailError = null;
+    if (email.length === 0) {
+        emailError = "El correo electrónico es obligatorio.";
+    } else {
+        const at1 = email.indexOf("@");
+        const at2 = email.indexOf("@", at1 + 1);
+        if (at1 === -1 || at2 !== -1) {
+            emailError = "Debe tener el formato parte-local@dominio.";
+        } else {
+            const local = email.slice(0, at1);
+            const dominio = email.slice(at1 + 1);
+
+            // longitudes de partes
+            if (!emailError && (local.length < 1 || local.length > 64)) {
+                emailError = "La parte local debe tener entre 1 y 64 caracteres.";
+            }
+            if (!emailError && (dominio.length < 1 || dominio.length > 255)) {
+                emailError = "El dominio debe tener entre 1 y 255 caracteres.";
+            }
+
+            // parte-local: caracteres permitidos y reglas del punto
+            if (!emailError) {
+                const localRegex = /^[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~.]+$/;
+                if (!localRegex.test(local)) {
+                    emailError = "La parte local contiene caracteres no permitidos.";
+                } else if (local.startsWith('.') || local.endsWith('.')) {
+                    emailError = "La parte local no puede empezar ni terminar con punto.";
+                } else if (local.includes('..')) {
+                    emailError = "La parte local no puede contener puntos consecutivos.";
+                }
+            }
+
+            // dominio: subdominios separados por punto, cada uno 1..63, [A-Za-z0-9-], sin guion al inicio/fin
+            if (!emailError) {
+                const labels = dominio.split('.');
+                if (labels.length < 1) {
+                    emailError = "El dominio debe tener al menos un subdominio.";
+                } else {
+                    for (let i = 0; i < labels.length; i++) {
+                        const lab = labels[i];
+                        if (lab.length < 1 || lab.length > 63) {
+                            emailError = `El subdominio "${lab}" debe tener entre 1 y 63 caracteres.`;
+                            break;
+                        }
+                        if (!/^[A-Za-z0-9-]+$/.test(lab)) {
+                            emailError = `El subdominio "${lab}" contiene caracteres no permitidos.`;
+                            break;
+                        }
+                        if (lab.startsWith('-') || lab.endsWith('-')) {
+                            emailError = `El subdominio "${lab}" no puede empezar ni terminar con guion.`;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (emailError) {
+        mostrarErrorCampo(emailCampo, emailError);
         ok = false;
     }
 
@@ -78,22 +141,30 @@ function validarFormulario(event) {
         ok = false;
     }
 
-    // Fecha de nacimiento
+    // Fecha de nacimiento (mensajes específicos)
     const fechaIni = $("nacimiento").value;
     if (fechaIni) {
-        let fechaNacimiento = new Date(fechaIni);
-        let fechaActual = new Date();
-        let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
-        let mes = fechaActual.getMonth() - fechaNacimiento.getMonth();
-        if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) {
-            edad--;
-        }
-        if (edad < 18) {
-            mostrarErrorCampo($("nacimiento"), "Debes ser mayor de edad para registrarte.");
+        const fechaNacimiento = new Date(fechaIni);
+        const hoy = new Date();
+        // Normalizar horas para evitar desfases
+        fechaNacimiento.setHours(0,0,0,0);
+        hoy.setHours(0,0,0,0);
+        if (fechaNacimiento > hoy) {
+            mostrarErrorCampo($("nacimiento"), "La fecha de nacimiento no puede ser posterior a hoy.");
             ok = false;
+        } else {
+            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            const mes = hoy.getMonth() - fechaNacimiento.getMonth();
+            if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+                edad--;
+            }
+            if (edad < 18) {
+                mostrarErrorCampo($("nacimiento"), "Debes ser mayor de edad para registrarte.");
+                ok = false;
+            }
         }
     } else {
-        mostrarErrorCampo($("nacimiento"), "Debes ingresar una fecha de nacimiento válida.");
+        mostrarErrorCampo($("nacimiento"), "Debes ingresar una fecha de nacimiento.");
         ok = false;
     }
 
@@ -140,6 +211,28 @@ function load() {
     const nacimiento = $("nacimiento");
     if (nacimiento) {
         nacimiento.addEventListener('focus', () => nacimiento.classList.remove('campo-error'));
+    }
+
+    // Activar validación nativa para email (sin usar type en HTML)
+    const emailCampoLoad = $("email");
+    if (emailCampoLoad) {
+        try { 
+            emailCampoLoad.setAttribute('type', 'email'); 
+        } catch (e) {}
+    }
+
+    // Asignar tipo password por JS (sin usar type en HTML)
+    const pass1 = $("password");
+    if (pass1) { 
+        try { 
+            pass1.setAttribute('type', 'password'); 
+        } catch (e) {} 
+    }
+    const pass2 = $("password2");
+    if (pass2) { 
+        try { 
+            pass2.setAttribute('type', 'password'); 
+        } catch (e) {} 
     }
 
     //Foto de perfil

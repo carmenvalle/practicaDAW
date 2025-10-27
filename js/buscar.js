@@ -92,6 +92,16 @@ function validarBusqueda(event) {
         ok = false;
     }
 
+    // Ciudad y país: si hay ciudad, país obligatorio
+    const ciudadCampo = $("ciudad");
+    const paisCampo = $("pais");
+    const ciudad = ciudadCampo ? ciudadCampo.value.trim() : "";
+    const pais = paisCampo ? paisCampo.value.trim() : "";
+    if (ciudad !== "" && pais === "") {
+        mostrarErrorCampo(paisCampo, "Si indicas una ciudad, debes indicar también un país.");
+        ok = false;
+    }
+
     if (ok) {
         $("formBuscar").submit();
     }

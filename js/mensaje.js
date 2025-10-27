@@ -42,6 +42,14 @@ function validarMensaje(event) {
         ok = false;
     }
 
+    // Texto del mensaje (mínimo 10 caracteres no vacíos)
+    const area = $("mensaje");
+    const texto = area ? area.value.trim() : "";
+    if (texto.length < 10) {
+        mostrarErrorCampo(area, "Escribe al menos 10 caracteres en el mensaje.");
+        ok = false;
+    }
+
     if (ok) {
         $("formMensaje").submit();
     }
@@ -76,6 +84,17 @@ function load() {
             contenedor.appendChild(document.createTextNode(" "));
         });
     }
+
+    // Limpiar errores al escribir/cambiar
+    document.querySelectorAll('input, textarea').forEach(ctrl => {
+        const limpiar = () => {
+            ctrl.classList.remove('campo-error');
+            const elim = ctrl.nextElementSibling;
+            if (elim && elim.classList.contains('error-campo')) { elim.remove(); }
+        };
+        ctrl.addEventListener('input', limpiar);
+        ctrl.addEventListener('change', limpiar);
+    });
 }
 
 document.addEventListener("DOMContentLoaded", load);
